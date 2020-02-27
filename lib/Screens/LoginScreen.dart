@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hqgps_flutter/Constants/Constant.dart';
 import 'package:hqgps_flutter/bloc/bloc.dart';
+import 'package:http/http.dart' show Client;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,8 +13,20 @@ class LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
-  changeThePage(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(MAP_SCREEN);
+  void _login(account, password) async{
+    Client client = Client();
+    String _baseUrl = 'http://api.56gps.com/weixin/get_gps_info.php?action=wx_bind&user=' + account + '&psw=' + password;
+    final response = await client.get("$_baseUrl");
+    print(response.body.toString());
+    if (response.statusCode == 200) {
+      if(response.body.toString().length > 15){
+         Navigator.of(context).pushReplacementNamed(MAP_SCREEN);
+      } else {
+        throw Exception('Failed to Login');
+      }
+    } else {
+      throw Exception('Failed to Login');
+    }
   }
 
   Widget build(BuildContext context) {
@@ -34,20 +47,18 @@ class LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               StreamBuilder<String>(
-                stream: bloc.email,
+                stream: bloc.account,
                 builder: (context, snapshot) => TextField(
-                      onChanged: bloc.emailChanged,
-                      keyboardType: TextInputType.emailAddress,
+                      onChanged: bloc.accountChanged,
+                      keyboardType: TextInputType.text,
                       style: new TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         enabledBorder: const OutlineInputBorder(
                           borderSide: const BorderSide(color: Colors.white, width:0.0),
                         ),
                           border: OutlineInputBorder(),
-                          hintText: "Enter email",
-                          labelText: "Email",
+                          labelText: "账号",
                           labelStyle: new TextStyle(color: Colors.white),
-                          hintStyle: new TextStyle(color: Colors.white),
                           errorText: snapshot.error),
                     ),
               ),
@@ -66,10 +77,8 @@ class LoginScreenState extends State<LoginScreen> {
                           borderSide: const BorderSide(color: Colors.white, width:0.0),
                         ),
                           border: OutlineInputBorder(),
-                          hintText: "Enter password",
-                          labelText: "Password",
+                          labelText: "密码",
                           labelStyle: new TextStyle(color: Colors.white),
-                          hintStyle: new TextStyle(color: Colors.white),
                           errorText: snapshot.error),
                     ),
               ),
@@ -81,7 +90,7 @@ class LoginScreenState extends State<LoginScreen> {
                 builder: (context, snapshot) => RaisedButton(
                       color: Colors.tealAccent,
                       onPressed: snapshot.hasData
-                          ? () => changeThePage(context)
+                          ? () => _login(bloc.currentAccount, bloc.currentPassword)
                           : null,
                       child: Text("Submit"),
                     ),
