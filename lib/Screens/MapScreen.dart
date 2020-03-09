@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -7,16 +8,16 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context){
-        return new Scaffold(
-      body: new SizedBox.expand(
-        child: Container (
-          color: Colors.black,
-          child: Image (
-            fit: BoxFit.fitHeight,
-            image: AssetImage('assets/wallpaper.jpg')
-          )
-        )
-      )
-    );
+        return AmapView(
+          mapType: MapType.Standard,
+          showZoomControl: false,
+          showCompass: false,
+          showScaleControl: false,
+          zoomGesturesEnabled: true,
+          scrollGesturesEnabled: true,
+          tiltGestureEnabled: false,
+          zoomLevel: 10,
+          centerCoordinate: LatLng(39, 116),
+        );
   }
 }

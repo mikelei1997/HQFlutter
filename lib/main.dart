@@ -3,6 +3,7 @@ import 'package:hqgps_flutter/Screens/LoginScreen.dart';
 import 'package:hqgps_flutter/Screens/SplashScreen.dart';
 import 'package:hqgps_flutter/Constants/Constant.dart';
 import 'package:hqgps_flutter/Screens/MapScreen.dart';
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 
 Future main() async {
   runApp(new MaterialApp(
@@ -18,4 +19,6 @@ Future main() async {
       MAP_SCREEN: (BuildContext context) => new MapScreen(),
     },
   ));
+  await AmapService.init(iosKey: AMAP_IOS_KEY, androidKey: AMAP_ANDROID_KEY);
+  await enableFluttifyLog(false);
 }

@@ -26,8 +26,7 @@ dependencies:
   shared_preferences: "^0.5.6"
   rxdart: "^0.23.1"
   http: "0.12.0"
-  js: ^0.6.0
-  
+  amap_map_fluttify: ^0.18.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
